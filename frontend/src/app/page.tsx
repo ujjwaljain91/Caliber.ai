@@ -69,7 +69,7 @@ export default function AppEntryPage() {
   const router = useRouter();
   const { user, isAuthenticated, openAuthModal, logout } = useAuth();
   
-  // viewState: "LANDING" (unauthenticated landing page) | "WORKSPACE" (authenticated executive app workspace)
+  // viewState: "LANDING" (unauthenticated public landing page) | "WORKSPACE" (authenticated liquid glass workspace)
   const [viewState, setViewState] = useState<"LANDING" | "WORKSPACE">("LANDING");
   const [activeTab, setActiveTab] = useState<"DASHBOARD" | "CANDIDATES">("DASHBOARD");
   const [candidates, setCandidates] = useState<Candidate[]>([]);
@@ -87,7 +87,6 @@ export default function AppEntryPage() {
     fetchCandidates();
   }, []);
 
-  // When authentication status changes, update viewState
   useEffect(() => {
     if (isAuthenticated) {
       setViewState("WORKSPACE");
@@ -226,11 +225,16 @@ export default function AppEntryPage() {
   });
 
   // ──────────────────────────────────────────────
-  // MODE A: PUBLIC MARKETING LANDING PAGE (FIRST VISIT)
+  // MODE A: PUBLIC MARKETING LANDING PAGE (UNAUTHENTICATED)
   // ──────────────────────────────────────────────
   if (viewState === "LANDING") {
     return (
-      <main className="flex-1 flex flex-col bg-canvas text-text min-h-screen relative selection:bg-accent selection:text-white">
+      <main className="flex-1 flex flex-col bg-canvas text-text min-h-screen relative overflow-hidden selection:bg-accent selection:text-white">
+        
+        {/* Background Refracted Liquid Orbs */}
+        <div className="absolute top-[-100px] left-[10%] w-[500px] h-[500px] rounded-full bg-accent/15 blur-[120px] pointer-events-none animate-orb-1" />
+        <div className="absolute top-[40%] right-[-100px] w-[600px] h-[600px] rounded-full bg-blue-600/10 blur-[140px] pointer-events-none animate-orb-2" />
+
         {/* Floating Liquid Glass Header Navbar */}
         <header className="sticky top-3 z-40 max-w-7xl mx-auto px-4 w-full">
           <div className="rounded-3xl liquid-glass-elevated px-6 h-16 flex items-center justify-between shadow-2xl border border-white/15">
@@ -338,36 +342,41 @@ export default function AppEntryPage() {
   }
 
   // ──────────────────────────────────────────────
-  // MODE B: AUTHENTICATED EXECUTIVE WORKSPACE (LEFT SIDEBAR)
+  // MODE B: AUTHENTICATED APPLE LIQUID GLASS WORKSPACE
   // ──────────────────────────────────────────────
   return (
-    <div className="flex h-screen bg-[#08090A] text-text overflow-hidden font-sans selection:bg-accent selection:text-white">
+    <div className="flex h-screen bg-canvas text-text overflow-hidden font-sans selection:bg-accent selection:text-white relative">
       
-      {/* EXECUTIVE LEFT SIDEBAR NAVIGATION */}
-      <aside className="w-64 bg-[#0d0f14] border-r border-white/10 flex flex-col justify-between shrink-0 z-30 select-none">
+      {/* Background Refracted Liquid Orbs */}
+      <div className="absolute top-[-150px] left-[15%] w-[600px] h-[600px] rounded-full bg-accent/15 blur-[140px] pointer-events-none animate-orb-1 z-0" />
+      <div className="absolute bottom-[-100px] right-[10%] w-[700px] h-[700px] rounded-full bg-blue-600/10 blur-[160px] pointer-events-none animate-orb-2 z-0" />
+      <div className="absolute top-[35%] left-[50%] -translate-x-1/2 w-[500px] h-[500px] rounded-full bg-emerald-500/10 blur-[150px] pointer-events-none animate-liquid-pulse z-0" />
+
+      {/* EXECUTIVE LEFT SIDEBAR (APPLE LIQUID GLASS) */}
+      <aside className="w-64 liquid-glass-elevated border-r border-white/15 flex flex-col justify-between shrink-0 z-30 select-none backdrop-blur-3xl shadow-2xl relative">
         
         {/* Brand Emblem */}
         <div>
-          <div className="h-16 px-5 border-b border-white/10 flex items-center gap-3">
+          <div className="h-16 px-5 border-b border-white/15 flex items-center gap-3">
             <img 
               src="/logo-icon-clean.png" 
               alt="Caliber AI Logo" 
-              className="h-9 w-auto object-contain drop-shadow-[0_0_10px_rgba(255,64,0,0.5)]"
+              className="h-9 w-auto object-contain drop-shadow-[0_0_12px_rgba(255,64,0,0.5)]"
             />
             <div className="flex flex-col">
               <span className="text-sm font-black tracking-wider text-white font-mono leading-none">CALIBER AI</span>
-              <span className="text-[10px] text-accent font-semibold tracking-widest uppercase mt-0.5">Assessor Studio</span>
+              <span className="text-[10px] text-accent font-extrabold tracking-widest uppercase mt-0.5">Assessor Studio</span>
             </div>
           </div>
 
-          {/* Sidebar Tabs */}
-          <nav className="p-3 space-y-1.5 mt-2">
+          {/* Sidebar Liquid Nav Tabs */}
+          <nav className="p-3 space-y-2 mt-2">
             <button
               onClick={() => setActiveTab("DASHBOARD")}
-              className={`w-full flex items-center justify-between px-3.5 py-3 rounded-2xl text-xs font-bold transition-all duration-200 ${
+              className={`w-full flex items-center justify-between px-3.5 py-3 rounded-2xl text-xs font-bold transition-all duration-300 ${
                 activeTab === "DASHBOARD"
-                  ? "bg-accent text-white shadow-lg shadow-accent/25"
-                  : "text-muted hover:text-white hover:bg-white/5"
+                  ? "bg-accent text-white shadow-xl shadow-accent/30 border border-accent-hover"
+                  : "liquid-glass-pill text-muted hover:text-white"
               }`}
             >
               <div className="flex items-center gap-3">
@@ -383,10 +392,10 @@ export default function AppEntryPage() {
 
             <button
               onClick={() => setActiveTab("CANDIDATES")}
-              className={`w-full flex items-center justify-between px-3.5 py-3 rounded-2xl text-xs font-bold transition-all duration-200 ${
+              className={`w-full flex items-center justify-between px-3.5 py-3 rounded-2xl text-xs font-bold transition-all duration-300 ${
                 activeTab === "CANDIDATES"
-                  ? "bg-accent text-white shadow-lg shadow-accent/25"
-                  : "text-muted hover:text-white hover:bg-white/5"
+                  ? "bg-accent text-white shadow-xl shadow-accent/30 border border-accent-hover"
+                  : "liquid-glass-pill text-muted hover:text-white"
               }`}
             >
               <div className="flex items-center gap-3">
@@ -395,18 +404,18 @@ export default function AppEntryPage() {
                 </svg>
                 <span>Demo Candidates</span>
               </div>
-              <span className="text-[10px] font-mono font-bold bg-white/10 px-2 py-0.5 rounded-full text-muted">
+              <span className="text-[10px] font-mono font-bold bg-white/10 px-2 py-0.5 rounded-full text-muted border border-white/10">
                 {candidates.length || 20}
               </span>
             </button>
           </nav>
         </div>
 
-        {/* User Account / Sign Out Capsule */}
-        <div className="p-3 border-t border-white/10 space-y-2">
-          <div className="bg-white/5 p-3 rounded-2xl border border-white/10 flex items-center justify-between">
+        {/* Liquid User Account Capsule */}
+        <div className="p-3 border-t border-white/15 space-y-2">
+          <div className="liquid-glass p-3 rounded-2xl border border-white/15 flex items-center justify-between shadow-lg">
             <div className="flex items-center gap-2.5 overflow-hidden">
-              <div className="w-8 h-8 rounded-xl bg-accent/20 border border-accent/40 text-accent font-black flex items-center justify-center text-xs shrink-0">
+              <div className="w-8 h-8 rounded-xl bg-accent/20 border border-accent/40 text-accent font-black flex items-center justify-center text-xs shrink-0 shadow-md">
                 {user?.name ? user.name.charAt(0) : "A"}
               </div>
               <div className="truncate">
@@ -421,7 +430,7 @@ export default function AppEntryPage() {
                 setViewState("LANDING");
               }}
               title="Sign Out to Landing Page"
-              className="p-1.5 rounded-xl hover:bg-red-500/20 text-muted hover:text-red-400 transition-colors shrink-0"
+              className="p-1.5 rounded-xl hover:bg-red-500/20 text-muted hover:text-red-400 transition-colors shrink-0 border border-transparent hover:border-red-500/30"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
@@ -432,10 +441,10 @@ export default function AppEntryPage() {
       </aside>
 
       {/* MAIN WORKSPACE CONTENT AREA */}
-      <main className="flex-1 flex flex-col h-full overflow-y-auto relative bg-[#08090A]">
+      <main className="flex-1 flex flex-col h-full overflow-y-auto relative z-10">
         
-        {/* Workspace Top Bar */}
-        <header className="h-16 border-b border-white/10 px-8 flex items-center justify-between sticky top-0 bg-[#08090A]/90 backdrop-blur-xl z-20 shrink-0">
+        {/* Workspace Top Header Bar */}
+        <header className="h-16 border-b border-white/15 px-8 flex items-center justify-between sticky top-0 liquid-glass-elevated z-20 shrink-0 backdrop-blur-2xl">
           <div className="flex items-center gap-3">
             <span className="text-xs font-mono text-muted uppercase tracking-wider font-semibold">Workspace</span>
             <span className="text-muted/40">/</span>
@@ -445,23 +454,23 @@ export default function AppEntryPage() {
           </div>
 
           <div className="flex items-center gap-4 text-xs font-mono">
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-semibold">
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full liquid-glass-success text-emerald-400 font-semibold border border-emerald-500/30 shadow-md">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              LangGraph State Engine: Active
+              LangGraph Engine: Active
             </div>
           </div>
         </header>
 
-        {/* TAB 1: PERSONALIZED CANDIDATE DASHBOARD */}
+        {/* TAB 1: PERSONALIZED CANDIDATE DASHBOARD (APPLE LIQUID GLASS) */}
         {activeTab === "DASHBOARD" && (
           <div className="p-8 max-w-7xl mx-auto w-full space-y-8 animate-fade-in">
             
             {/* Candidate Overview Header Card */}
-            <div className="rounded-3xl bg-[#12141c] p-6 sm:p-8 border border-white/15 relative overflow-hidden shadow-2xl space-y-6">
+            <div className="rounded-3xl liquid-glass-elevated p-6 sm:p-8 border border-white/20 relative overflow-hidden shadow-2xl space-y-6">
               
               <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-5">
                 <div className="flex items-center gap-3">
-                  <span className="px-3 py-1 rounded-full bg-accent/20 border border-accent/40 text-accent font-mono text-xs font-black uppercase tracking-wider">
+                  <span className="px-3.5 py-1 rounded-full liquid-glass-accent text-accent font-mono text-xs font-black uppercase tracking-wider shadow-md">
                     PERSONALIZED WORKSPACE
                   </span>
                   <span className="text-xs text-muted font-medium">
@@ -484,9 +493,10 @@ export default function AppEntryPage() {
                     <div className="flex-1 relative">
                       <p className="text-xs text-muted font-mono uppercase tracking-wider mb-1 font-semibold">Active Candidate Profile</p>
                       
+                      {/* Custom Liquid Glass Candidate Switcher Button */}
                       <button
                         onClick={() => setCandidateDropdownOpen(!candidateDropdownOpen)}
-                        className="w-full flex items-center justify-between px-4 py-2.5 rounded-2xl bg-[#1a1d28] border border-white/20 text-white font-extrabold text-lg hover:border-accent/60 transition-all text-left shadow-inner"
+                        className="w-full flex items-center justify-between px-4 py-2.5 rounded-2xl liquid-glass border border-white/25 text-white font-extrabold text-lg hover:border-accent/60 transition-all text-left shadow-lg"
                       >
                         <span className="truncate">
                           {dashboardData?.candidate.member.name || activeCandidate?.member?.name} ({activeCandidate?.member?.id || selectedCandidateId})
@@ -496,10 +506,11 @@ export default function AppEntryPage() {
                         </svg>
                       </button>
 
+                      {/* Dropdown Options List */}
                       {candidateDropdownOpen && (
                         <>
                           <div className="fixed inset-0 z-40" onClick={() => setCandidateDropdownOpen(false)} />
-                          <div className="absolute left-0 top-full mt-2 w-full rounded-2xl bg-[#181b24] border border-white/20 p-2 shadow-2xl z-50 animate-fade-in max-h-60 overflow-y-auto">
+                          <div className="absolute left-0 top-full mt-2 w-full rounded-2xl liquid-glass-elevated border border-white/20 p-2 shadow-2xl z-50 animate-fade-in max-h-60 overflow-y-auto backdrop-blur-3xl">
                             {candidates.map((c) => (
                               <button
                                 key={c.member.id}
@@ -509,8 +520,8 @@ export default function AppEntryPage() {
                                 }}
                                 className={`w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-bold flex items-center justify-between transition-colors ${
                                   c.member.id === selectedCandidateId
-                                    ? "bg-accent text-white"
-                                    : "text-gray-300 hover:bg-white/10 hover:text-white"
+                                    ? "bg-accent text-white shadow-md shadow-accent/25"
+                                    : "text-gray-200 hover:bg-white/15 hover:text-white"
                                 }`}
                               >
                                 <span>{c.member.name} ({c.member.id})</span>
@@ -524,7 +535,7 @@ export default function AppEntryPage() {
                   </div>
 
                   <div className="flex flex-wrap items-center gap-2 text-xs text-muted/90 font-medium pl-18">
-                    <span className="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 text-white font-semibold">
+                    <span className="px-2.5 py-1 rounded-lg liquid-glass border border-white/10 text-white font-semibold">
                       {dashboardData?.candidate.member.jobRole || activeCandidate?.member?.jobRole}
                     </span>
                     <span>•</span>
@@ -534,7 +545,8 @@ export default function AppEntryPage() {
                   </div>
                 </div>
 
-                <div className="lg:col-span-5 bg-[#181b26] p-5 rounded-2xl border border-white/10 flex items-center justify-between shadow-inner">
+                {/* Readiness Score Index Liquid Glass Box */}
+                <div className="lg:col-span-5 liquid-glass-accent p-5 rounded-2xl border border-accent/30 flex items-center justify-between shadow-xl">
                   <div className="flex items-center gap-4">
                     <div className="relative w-16 h-16 flex items-center justify-center shrink-0">
                       <svg className="w-16 h-16 transform -rotate-90">
@@ -566,7 +578,7 @@ export default function AppEntryPage() {
                     </div>
                   </div>
 
-                  <div className="text-right pl-4 border-l border-white/10">
+                  <div className="text-right pl-4 border-l border-white/15">
                     <p className="text-[10px] text-muted font-mono font-bold uppercase tracking-wider">Curriculum</p>
                     <p className="text-lg font-black text-white font-mono">
                       {dashboardData?.completed_curriculum_days || 28}<span className="text-muted text-xs">/31</span>
@@ -589,7 +601,7 @@ export default function AppEntryPage() {
 
                   <button
                     onClick={() => setActiveTab("CANDIDATES")}
-                    className="w-full sm:w-auto px-5 py-3.5 rounded-2xl bg-white/5 border border-white/15 text-white hover:bg-white/10 font-bold text-xs transition-all flex items-center justify-center gap-2"
+                    className="w-full sm:w-auto px-5 py-3.5 rounded-2xl liquid-glass-pill border border-white/15 text-white font-bold text-xs transition-all flex items-center justify-center gap-2"
                   >
                     <span>📋</span>
                     <span>View Candidate Directory (Demo)</span>
@@ -602,14 +614,14 @@ export default function AppEntryPage() {
               </div>
             </div>
 
-            {/* Competency Matrix */}
+            {/* Competency Matrix (Liquid Glass Grid) */}
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div>
                   <h2 className="text-lg font-bold text-white tracking-tight">Competency Matrix</h2>
                   <p className="text-xs text-muted">Core engineering curriculum evaluation across 5 specialized domains</p>
                 </div>
-                <span className="text-xs font-mono font-bold text-accent bg-accent/15 px-3 py-1 rounded-full border border-accent/30">
+                <span className="text-xs font-mono font-bold text-accent liquid-glass-accent px-3 py-1 rounded-full border border-accent/30">
                   5 Core Modules
                 </span>
               </div>
@@ -622,19 +634,19 @@ export default function AppEntryPage() {
                   { module_id: "MOD-04", title: "Model Context Protocol (MCP)", days_range: "Days 23 - 26", status: "In Progress", score: 82.0, key_skills: ["SSE Transport Protocol", "Tool Registries", "Stateful Remote Sessions"] },
                   { module_id: "MOD-05", title: "Deployment & Observability", days_range: "Days 27 - 31", status: "Needs Review", score: 78.5, key_skills: ["Kubernetes HPA", "Prometheus Metrics", "Docker Multi-stage Builds"] },
                 ]).map((mod) => (
-                  <div key={mod.module_id} className="rounded-3xl bg-[#12141c] p-6 border border-white/10 hover:border-accent/40 transition-all duration-300 flex flex-col justify-between space-y-4 shadow-xl">
+                  <div key={mod.module_id} className="rounded-3xl liquid-glass p-6 border border-white/15 hover:border-accent/40 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between space-y-4 shadow-xl">
                     <div>
                       <div className="flex items-center justify-between mb-2">
-                        <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-muted bg-white/5 px-2.5 py-1 rounded-lg">
+                        <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-muted liquid-glass px-2.5 py-1 rounded-lg">
                           {mod.days_range}
                         </span>
 
                         <span className={`text-[11px] font-bold px-3 py-0.5 rounded-full border ${
                           mod.status === "Mastered"
-                            ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/40"
+                            ? "liquid-glass-success text-emerald-400 border-emerald-500/40"
                             : mod.status === "In Progress"
-                            ? "bg-blue-500/20 text-blue-400 border-blue-500/40"
-                            : "bg-amber-500/20 text-amber-400 border-amber-500/40"
+                            ? "liquid-glass text-blue-400 border-blue-500/40"
+                            : "liquid-glass-warning text-amber-400 border-amber-500/40"
                         }`}>
                           {mod.status}
                         </span>
@@ -652,7 +664,7 @@ export default function AppEntryPage() {
                         <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden">
                           <div
                             className={`h-full rounded-full transition-all duration-700 ${
-                              mod.score >= 90 ? "bg-emerald-500" : mod.score >= 80 ? "bg-accent" : "bg-amber-500"
+                              mod.score >= 90 ? "bg-emerald-500 shadow-md shadow-emerald-500/30" : mod.score >= 80 ? "bg-accent shadow-md shadow-accent/30" : "bg-amber-500"
                             }`}
                             style={{ width: `${mod.score}%` }}
                           />
@@ -661,7 +673,7 @@ export default function AppEntryPage() {
 
                       <div className="flex flex-wrap gap-1.5 pt-1">
                         {mod.key_skills.map((skill, idx) => (
-                          <span key={idx} className="text-[10px] font-medium text-gray-300 bg-white/5 px-2 py-0.5 rounded-md border border-white/10">
+                          <span key={idx} className="text-[10px] font-medium text-gray-200 liquid-glass px-2 py-0.5 rounded-md border border-white/10">
                             {skill}
                           </span>
                         ))}
@@ -672,11 +684,11 @@ export default function AppEntryPage() {
               </div>
             </div>
 
-            {/* Breeth AI Cognitive Profile */}
-            <div className="rounded-3xl bg-[#12141c] p-6 sm:p-8 border border-white/15 shadow-2xl space-y-6">
+            {/* Breeth AI Cognitive Profile (Liquid Glass Panel) */}
+            <div className="rounded-3xl liquid-glass-elevated p-6 sm:p-8 border border-white/20 shadow-2xl space-y-6">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-5">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-2xl bg-accent/20 border border-accent/40 text-accent flex items-center justify-center font-bold text-lg">
+                  <div className="w-10 h-10 rounded-2xl bg-accent/20 border border-accent/40 text-accent flex items-center justify-center font-bold text-lg shadow-md">
                     🧠
                   </div>
                   <div>
@@ -685,12 +697,12 @@ export default function AppEntryPage() {
                   </div>
                 </div>
 
-                <span className="text-xs font-mono font-bold text-accent bg-accent/10 px-3 py-1 rounded-2xl border border-accent/30 shrink-0">
+                <span className="text-xs font-mono font-bold text-accent liquid-glass-accent px-3 py-1 rounded-2xl border border-accent/30 shrink-0">
                   Memory Endpoint: Active
                 </span>
               </div>
 
-              <p className="text-xs sm:text-sm text-gray-300 leading-relaxed bg-[#181b24] p-4 rounded-2xl border border-white/10">
+              <p className="text-xs sm:text-sm text-gray-200 leading-relaxed liquid-glass p-4 rounded-2xl border border-white/10">
                 {dashboardData?.cognitive_profile.summary || "Demonstrates high-level architectural reasoning across RAG vector search, LangGraph state machine cycles, and intent-aware memory."}
               </p>
 
@@ -699,14 +711,14 @@ export default function AppEntryPage() {
                   <h3 className="text-xs font-extrabold uppercase tracking-wider text-emerald-400 flex items-center gap-2">
                     <span>✓</span> Identified Reasoning Strengths
                   </h3>
-                  <ul className="space-y-2 text-xs text-gray-300">
+                  <ul className="space-y-2 text-xs text-gray-200">
                     {(dashboardData?.cognitive_profile.strengths || [
                       "Probes edge-case state persistence in cyclic graph architectures",
                       "Strong on vector similarity search trade-offs under peak load",
                       "High precision in function calling schema error recovery",
                       "Clear understanding of SSE connection management for MCP"
                     ]).map((item, idx) => (
-                      <li key={idx} className="flex items-start gap-2 bg-emerald-500/10 p-2.5 rounded-xl border border-emerald-500/20">
+                      <li key={idx} className="flex items-start gap-2 liquid-glass-success p-2.5 rounded-xl border border-emerald-500/30">
                         <span className="text-emerald-400 font-bold shrink-0">✓</span>
                         <span>{item}</span>
                       </li>
@@ -718,12 +730,12 @@ export default function AppEntryPage() {
                   <h3 className="text-xs font-extrabold uppercase tracking-wider text-amber-400 flex items-center gap-2">
                     <span>🎯</span> Targeted Knowledge Gaps
                   </h3>
-                  <ul className="space-y-2 text-xs text-gray-300">
+                  <ul className="space-y-2 text-xs text-gray-200">
                     {(dashboardData?.cognitive_profile.knowledge_gaps || [
                       "Needs deeper review of HNSW vector index construction parameters (M and efConstruction)",
                       "Kubernetes liveness and readiness probe tuning during container traffic spikes"
                     ]).map((item, idx) => (
-                      <li key={idx} className="flex items-start gap-2 bg-amber-500/10 p-2.5 rounded-xl border border-amber-500/20">
+                      <li key={idx} className="flex items-start gap-2 liquid-glass-warning p-2.5 rounded-xl border border-amber-500/30">
                         <span className="text-amber-400 font-bold shrink-0">!</span>
                         <span>{item}</span>
                       </li>
@@ -741,7 +753,7 @@ export default function AppEntryPage() {
                     "Pydantic Schema Verification",
                     "Graceful Degradation Guards"
                   ]).map((pattern, idx) => (
-                    <span key={idx} className="px-3 py-1 rounded-xl text-xs font-bold bg-accent/15 text-accent border border-accent/30 font-mono">
+                    <span key={idx} className="px-3 py-1 rounded-xl text-xs font-bold liquid-glass-accent text-accent border border-accent/40 font-mono shadow-md">
                       #{pattern}
                     </span>
                   ))}
@@ -749,8 +761,8 @@ export default function AppEntryPage() {
               </div>
             </div>
 
-            {/* Assessment Session History Table */}
-            <div className="rounded-3xl bg-[#12141c] p-6 sm:p-8 border border-white/15 space-y-5 shadow-2xl">
+            {/* Assessment Session History Table (Liquid Glass Panel) */}
+            <div className="rounded-3xl liquid-glass p-6 sm:p-8 border border-white/15 space-y-5 shadow-2xl">
               <div className="flex items-center justify-between">
                 <div>
                   <h2 className="text-lg font-bold text-white">Assessment Session History</h2>
@@ -794,7 +806,7 @@ export default function AppEntryPage() {
                         <td className="py-3.5 px-3 text-center">
                           <button
                             onClick={() => router.push(`/evaluation/${item.session_id}`)}
-                            className="px-3 py-1.5 rounded-xl bg-accent/20 border border-accent/40 text-accent font-bold hover:bg-accent hover:text-white transition-all text-xs"
+                            className="px-3 py-1.5 rounded-xl liquid-glass-pill border border-accent/40 text-accent font-bold hover:bg-accent hover:text-white transition-all text-xs"
                           >
                             View Report →
                           </button>
@@ -809,7 +821,7 @@ export default function AppEntryPage() {
           </div>
         )}
 
-        {/* TAB 2: DEMO CANDIDATES DIRECTORY */}
+        {/* TAB 2: DEMO CANDIDATES DIRECTORY (LIQUID GLASS GRID) */}
         {activeTab === "CANDIDATES" && (
           <div className="p-8 max-w-7xl mx-auto w-full space-y-8 animate-fade-in">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-white/10">
@@ -823,7 +835,7 @@ export default function AppEntryPage() {
                 </p>
               </div>
 
-              <div className="flex items-center gap-1.5 p-1.5 rounded-2xl bg-[#12141c] border border-white/10 text-xs shrink-0">
+              <div className="flex items-center gap-1.5 p-1.5 rounded-2xl liquid-glass border border-white/15 text-xs shrink-0">
                 {["ALL", "DATA", "ENGINEER", "BACKEND"].map((tab) => (
                   <button
                     key={tab}
@@ -850,7 +862,7 @@ export default function AppEntryPage() {
                   placeholder="Search candidate name, role, or ID (e.g. CAND-001)..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-11 pr-4 py-3 rounded-2xl bg-[#12141c] border border-white/15 text-sm text-white
+                  className="w-full pl-11 pr-4 py-3 rounded-2xl liquid-glass text-sm text-white
                              placeholder:text-muted/50 focus:outline-none focus:border-accent/60
                              transition-all duration-300 shadow-lg"
                 />
@@ -866,7 +878,7 @@ export default function AppEntryPage() {
               </div>
             ) : error ? (
               <div className="flex items-center justify-center py-20">
-                <div className="flex flex-col items-center gap-4 max-w-md text-center p-8 rounded-3xl bg-[#12141c] border border-red-500/30">
+                <div className="flex flex-col items-center gap-4 max-w-md text-center p-8 rounded-3xl liquid-glass-error">
                   <p className="text-sm text-red-400 font-medium">{error}</p>
                   <button
                     onClick={() => { setError(null); setLoadingCandidates(true); fetchCandidates(); }}
@@ -912,8 +924,8 @@ export default function AppEntryPage() {
 
       {/* Loading Overlay */}
       {starting && (
-        <div className="fixed inset-0 z-50 bg-[#08090A]/80 backdrop-blur-2xl flex items-center justify-center">
-          <div className="flex flex-col items-center gap-5 p-8 rounded-3xl bg-[#12141c] border border-white/20 shadow-2xl text-center max-w-sm animate-fade-in">
+        <div className="fixed inset-0 z-50 bg-canvas/80 backdrop-blur-2xl flex items-center justify-center">
+          <div className="flex flex-col items-center gap-5 p-8 rounded-3xl liquid-glass-elevated border border-white/20 shadow-2xl text-center max-w-sm animate-fade-in">
             <div className="w-12 h-12 rounded-full border-2 border-accent/20 border-t-accent animate-spin" />
             <div>
               <p className="text-base font-bold text-white">Initializing Technical Assessment...</p>

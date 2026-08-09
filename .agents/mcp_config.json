@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "breeth": {
+      "serverUrl": "https://mcp.thebreeth.com/mcp",
+      "headers": {
+        "Authorization": "Bearer ck_live_F9M0fIlu_Ka_jEo7gmPSMgFTtxkIOapXyMrMCSwz3Qo"
+      }
+    }
+  }
+}

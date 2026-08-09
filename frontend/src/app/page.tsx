@@ -87,6 +87,7 @@ export default function AppEntryPage() {
     fetchCandidates();
   }, []);
 
+  // Sync auth state updates to return to landing if signed out
   useEffect(() => {
     if (!isAuthenticated) {
       setViewState("LANDING");
@@ -223,7 +224,7 @@ export default function AppEntryPage() {
   });
 
   // ──────────────────────────────────────────────
-  // MODE A: PUBLIC MARKETING LANDING PAGE (UNAUTHENTICATED)
+  // MODE A: PUBLIC MARKETING LANDING PAGE
   // ──────────────────────────────────────────────
   if (viewState === "LANDING") {
     return (
@@ -346,9 +347,172 @@ export default function AppEntryPage() {
           </div>
         </section>
 
-        {/* Footer */}
-        <footer className="border-t border-white/10 bg-canvas/30 backdrop-blur-xl py-8 px-6">
-          <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between text-xs text-muted/70 gap-4">
+        {/* ─── Capabilities Grid Section ─── */}
+        <section id="features" className="max-w-7xl mx-auto px-6 py-20 border-b border-white/10 relative z-10">
+          <div className="text-center max-w-2xl mx-auto mb-16">
+            <span className="text-xs font-semibold text-accent uppercase tracking-widest">Platform Capabilities</span>
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mt-2 text-white">Built for Deep Technical Verification</h2>
+            <p className="text-sm text-muted mt-2">
+              Designed to move past simple trivia memory and evaluate actual system engineering trade-offs.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="liquid-glass p-8 rounded-3xl hover:-translate-y-1.5 transition-all duration-500 shadow-xl">
+              <div className="w-12 h-12 rounded-2xl bg-accent/15 border border-accent/30 flex items-center justify-center mb-6">
+                <svg className="w-6 h-6 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-bold mb-2 text-white">Staff Assessor Persona</h3>
+              <p className="text-xs sm:text-sm text-gray-300 leading-relaxed">
+                Generates scenario-based technical questions probing complex architectures, schema validation limits, and real-world failure modes.
+              </p>
+            </div>
+
+            <div className="liquid-glass p-8 rounded-3xl hover:-translate-y-1.5 transition-all duration-500 shadow-xl">
+              <div className="w-12 h-12 rounded-2xl bg-blue-500/15 border border-blue-500/30 flex items-center justify-center mb-6">
+                <svg className="w-6 h-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19 14.5M9.75 3.104c.251.023.501.05.75.082" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-bold mb-2 text-white">Breeth AI Memory</h3>
+              <p className="text-xs sm:text-sm text-gray-300 leading-relaxed">
+                Tracks candidate reasoning trajectories across turns, preventing redundant questions and probing deeper on key architectural nuances.
+              </p>
+            </div>
+
+            <div className="liquid-glass p-8 rounded-3xl hover:-translate-y-1.5 transition-all duration-500 shadow-xl">
+              <div className="w-12 h-12 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center mb-6">
+                <svg className="w-6 h-6 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-bold mb-2 text-white">Multi-Dimensional Analytics</h3>
+              <p className="text-xs sm:text-sm text-gray-300 leading-relaxed">
+                Evaluates Answer Depth, Accuracy, and Trade-off Awareness to produce objective, boardroom-ready candidate assessments.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* ─── Workflow Section ─── */}
+        <section id="workflow" className="max-w-7xl mx-auto px-6 py-20 border-b border-white/10 relative z-10">
+          <div className="text-center max-w-2xl mx-auto mb-16">
+            <span className="text-xs font-semibold text-accent uppercase tracking-widest">Evaluation Process</span>
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mt-2 text-white">How Caliber AI Operates</h2>
+            <p className="text-sm text-muted mt-2">From candidate selection to final report synthesis</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+            <div className="liquid-glass p-8 rounded-3xl relative hover:-translate-y-1 transition-all duration-300 shadow-xl">
+              <span className="text-4xl font-black text-accent/40 mb-4 block font-mono">01</span>
+              <h3 className="text-lg font-bold mb-2 text-white">Select Candidate Profile</h3>
+              <p className="text-xs sm:text-sm text-gray-300 leading-relaxed">
+                Select a candidate profile from the directory to load their background curriculum objectives and historical skill domains.
+              </p>
+            </div>
+
+            <div className="liquid-glass p-8 rounded-3xl relative hover:-translate-y-1 transition-all duration-300 shadow-xl">
+              <span className="text-4xl font-black text-accent/40 mb-4 block font-mono">02</span>
+              <h3 className="text-lg font-bold mb-2 text-white">Adaptive Evaluation Loop</h3>
+              <p className="text-xs sm:text-sm text-gray-300 leading-relaxed">
+                Conduct live adaptive assessment turns. Automatically triggers targeted follow-up prompts whenever answers lack trade-off depth.
+              </p>
+            </div>
+
+            <div className="liquid-glass p-8 rounded-3xl relative hover:-translate-y-1 transition-all duration-300 shadow-xl">
+              <span className="text-4xl font-black text-accent/40 mb-4 block font-mono">03</span>
+              <h3 className="text-lg font-bold mb-2 text-white">Executive Synthesis</h3>
+              <p className="text-xs sm:text-sm text-gray-300 leading-relaxed">
+                Synthesize overall score (0-100), topic breakdowns, candidate strengths, gaps, and actionable recommended next learning steps.
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-14 text-center">
+            {isAuthenticated ? (
+              <button
+                onClick={() => setViewState("WORKSPACE")}
+                className="px-8 py-4 rounded-2xl bg-accent text-white font-bold text-sm shadow-2xl shadow-accent/30 hover:bg-accent-hover hover:-translate-y-0.5 transition-all duration-300 inline-flex items-center gap-2"
+              >
+                <span>Launch Candidate Evaluation Workspace →</span>
+              </button>
+            ) : (
+              <button
+                onClick={() => openAuthModal("LOGIN")}
+                className="px-8 py-4 rounded-2xl bg-accent text-white font-bold text-sm shadow-2xl shadow-accent/30 hover:bg-accent-hover hover:-translate-y-0.5 transition-all duration-300 inline-flex items-center gap-2"
+              >
+                <span>Sign In to Launch Assessment Workspace →</span>
+              </button>
+            )}
+          </div>
+        </section>
+
+        {/* Detailed Apple Liquid Footer */}
+        <footer className="border-t border-white/10 bg-canvas/30 backdrop-blur-xl pt-16 pb-12 px-6 relative z-10">
+          <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-white/10">
+            <div className="space-y-4">
+              <div className="flex items-center gap-3">
+                <img 
+                  src="/logo-icon-clean.png" 
+                  alt="Caliber AI" 
+                  className="h-8 w-auto object-contain drop-shadow-[0_0_10px_rgba(255,64,0,0.4)]"
+                />
+                <span className="text-sm font-black tracking-wider text-white font-mono leading-none">CALIBER AI</span>
+              </div>
+              <p className="text-xs text-muted leading-relaxed font-normal">
+                Enterprise-grade AI-powered technical interview engine designed for AI cohort graduates and engineering organizations.
+              </p>
+            </div>
+
+            <div>
+              <h4 className="text-xs font-semibold uppercase tracking-wider text-text mb-4">Capabilities</h4>
+              <ul className="space-y-2.5 text-xs text-muted font-normal">
+                <li><a href="#features" className="hover:text-text transition-colors">Adaptive Probing Logic</a></li>
+                <li><a href="#features" className="hover:text-text transition-colors">Cognitive Intent Memory</a></li>
+                <li><a href="#features" className="hover:text-text transition-colors">Calibrated Assessment</a></li>
+                <li><a href="#features" className="hover:text-text transition-colors">Real-Time Probing</a></li>
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="text-xs font-semibold uppercase tracking-wider text-text mb-4">Platform</h4>
+              <ul className="space-y-2.5 text-xs text-muted font-normal">
+                <li>
+                  <button 
+                    onClick={() => {
+                      if (isAuthenticated) {
+                        setViewState("WORKSPACE");
+                      } else {
+                        openAuthModal("LOGIN");
+                      }
+                    }} 
+                    className="hover:text-text transition-colors cursor-pointer"
+                  >
+                    Candidate Dashboard
+                  </button>
+                </li>
+                <li><a href="#workflow" className="hover:text-text transition-colors">Evaluation Workflow</a></li>
+                <li><a href="#features" className="hover:text-text transition-colors">Scoring Rubrics</a></li>
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="text-xs font-semibold uppercase tracking-wider text-text mb-4">System Status</h4>
+              <div className="space-y-3">
+                <div className="flex items-center gap-2 text-xs text-success font-semibold">
+                  <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
+                  Assessment Engine: Active
+                </div>
+                <p className="text-[11px] text-muted leading-relaxed font-normal">
+                  Calibrated Technical Assessment Service — Fully operational for multi-turn evaluations.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="max-w-7xl mx-auto mt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-muted/70 gap-4">
             <p>© 2026 Caliber AI Inc. All rights reserved.</p>
             <div className="flex items-center gap-6">
               <span>Terms of Service</span>
@@ -634,7 +798,7 @@ export default function AppEntryPage() {
               </div>
             </div>
 
-            {/* Competency Matrix (Liquid Glass Grid) */}
+            {/* Competency Matrix */}
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div>
@@ -704,7 +868,7 @@ export default function AppEntryPage() {
               </div>
             </div>
 
-            {/* Breeth AI Cognitive Profile (Liquid Glass Panel) */}
+            {/* Breeth AI Cognitive Profile */}
             <div className="rounded-3xl liquid-glass-elevated p-6 sm:p-8 border border-white/20 shadow-2xl space-y-6">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-5">
                 <div className="flex items-center gap-3">
@@ -750,7 +914,7 @@ export default function AppEntryPage() {
                   <h3 className="text-xs font-extrabold uppercase tracking-wider text-amber-400 flex items-center gap-2">
                     <span>🎯</span> Targeted Knowledge Gaps
                   </h3>
-                  <ul className="space-y-2 text-xs text-gray-200">
+                  <ul className="space-y-2 text-xs text-gray-300">
                     {(dashboardData?.cognitive_profile.knowledge_gaps || [
                       "Needs deeper review of HNSW vector index construction parameters (M and efConstruction)",
                       "Kubernetes liveness and readiness probe tuning during container traffic spikes"
@@ -781,7 +945,7 @@ export default function AppEntryPage() {
               </div>
             </div>
 
-            {/* Assessment Session History Table (Liquid Glass Panel) */}
+            {/* Assessment Session History Table */}
             <div className="rounded-3xl liquid-glass p-6 sm:p-8 border border-white/15 space-y-5 shadow-2xl">
               <div className="flex items-center justify-between">
                 <div>
@@ -841,7 +1005,7 @@ export default function AppEntryPage() {
           </div>
         )}
 
-        {/* TAB 2: DEMO CANDIDATES DIRECTORY (LIQUID GLASS GRID) */}
+        {/* TAB 2: DEMO CANDIDATES DIRECTORY */}
         {activeTab === "CANDIDATES" && (
           <div className="p-8 max-w-7xl mx-auto w-full space-y-8 animate-fade-in">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-white/10">

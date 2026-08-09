@@ -65,9 +65,12 @@ interface DashboardData {
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
-export default function WorkspaceLayoutPage() {
+export default function AppEntryPage() {
   const router = useRouter();
   const { user, isAuthenticated, openAuthModal, logout } = useAuth();
+  
+  // viewState: "LANDING" (unauthenticated landing page) | "WORKSPACE" (authenticated executive app workspace)
+  const [viewState, setViewState] = useState<"LANDING" | "WORKSPACE">("LANDING");
   const [activeTab, setActiveTab] = useState<"DASHBOARD" | "CANDIDATES">("DASHBOARD");
   const [candidates, setCandidates] = useState<Candidate[]>([]);
   const [selectedCandidateId, setSelectedCandidateId] = useState<string>("CAND-001");
@@ -84,11 +87,29 @@ export default function WorkspaceLayoutPage() {
     fetchCandidates();
   }, []);
 
+  // When authentication status changes, update viewState
   useEffect(() => {
-    if (selectedCandidateId) {
+    if (isAuthenticated) {
+      setViewState("WORKSPACE");
+    } else {
+      setViewState("LANDING");
+    }
+  }, [isAuthenticated]);
+
+  useEffect(() => {
+    if (viewState === "WORKSPACE" && selectedCandidateId) {
       fetchDashboardData(selectedCandidateId);
     }
-  }, [selectedCandidateId]);
+  }, [viewState, selectedCandidateId]);
+
+  const handleAuthSuccess = () => {
+    setViewState("WORKSPACE");
+  };
+
+  useEffect(() => {
+    window.addEventListener("caliber-auth-success", handleAuthSuccess);
+    return () => window.removeEventListener("caliber-auth-success", handleAuthSuccess);
+  }, []);
 
   async function fetchCandidates() {
     try {
@@ -204,13 +225,128 @@ export default function WorkspaceLayoutPage() {
     return matchesSearch && c.member.jobRole.toUpperCase().includes(roleFilter);
   });
 
+  // ──────────────────────────────────────────────
+  // MODE A: PUBLIC MARKETING LANDING PAGE (FIRST VISIT)
+  // ──────────────────────────────────────────────
+  if (viewState === "LANDING") {
+    return (
+      <main className="flex-1 flex flex-col bg-canvas text-text min-h-screen relative selection:bg-accent selection:text-white">
+        {/* Floating Liquid Glass Header Navbar */}
+        <header className="sticky top-3 z-40 max-w-7xl mx-auto px-4 w-full">
+          <div className="rounded-3xl liquid-glass-elevated px-6 h-16 flex items-center justify-between shadow-2xl border border-white/15">
+            <div className="flex items-center gap-3 cursor-pointer group">
+              <img 
+                src="/logo-icon-clean.png" 
+                alt="Caliber AI Logo" 
+                className="h-14 w-auto object-contain drop-shadow-[0_0_12px_rgba(255,64,0,0.4)] group-hover:scale-105 transition-transform duration-300"
+              />
+            </div>
+
+            <nav className="hidden md:flex items-center gap-6 text-xs text-muted font-semibold">
+              <a href="#features" className="hover:text-white transition-colors">Capabilities</a>
+              <a href="#workflow" className="hover:text-white transition-colors">Evaluation Workflow</a>
+              <a href="#architecture" className="hover:text-white transition-colors font-mono">LangGraph Engine</a>
+            </nav>
+
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => openAuthModal("LOGIN")}
+                className="px-4 py-2 rounded-2xl liquid-glass-pill text-xs font-semibold text-text hover:text-white transition-colors"
+              >
+                Sign In
+              </button>
+              <button
+                onClick={() => openAuthModal("REGISTER")}
+                className="px-5 py-2.5 rounded-2xl bg-accent text-white font-bold text-xs shadow-xl shadow-accent/25 hover:bg-accent-hover transition-all hover:-translate-y-0.5"
+              >
+                Create Account →
+              </button>
+            </div>
+          </div>
+        </header>
+
+        {/* Hero Section */}
+        <section className="relative overflow-hidden pt-20 pb-20 px-6 border-b border-white/10 flex-1">
+          <div className="max-w-5xl mx-auto text-center space-y-6 relative z-10">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full liquid-glass-accent text-accent text-xs font-semibold animate-fade-in shadow-lg">
+              <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
+              Autonomous Engineering Assessment Platform
+            </div>
+
+            <h1 className="text-4xl sm:text-6xl font-black tracking-tight leading-tight animate-fade-in-up">
+              Evaluate Technical Talent with <br className="hidden sm:inline" />
+              <span className="bg-gradient-to-r from-text via-text-secondary to-accent bg-clip-text text-transparent">
+                Uncompromised Rigor
+              </span>
+            </h1>
+
+            <p className="text-base sm:text-lg text-muted/80 max-w-2xl mx-auto animate-fade-in-up delay-1 leading-relaxed font-normal">
+              Caliber AI delivers dynamic multi-turn technical assessments, intelligent answer probing, and objective competency analytics to evaluate senior engineering talent with unyielding precision.
+            </p>
+
+            <div className="pt-6 flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up delay-2">
+              <button
+                onClick={() => openAuthModal("LOGIN")}
+                className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-accent text-white font-bold text-sm shadow-2xl shadow-accent/30 hover:bg-accent-hover hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2"
+              >
+                <span>Sign In to Candidate Dashboard →</span>
+              </button>
+
+              <button
+                onClick={() => openAuthModal("REGISTER")}
+                className="w-full sm:w-auto px-8 py-4 rounded-2xl liquid-glass-pill font-semibold text-sm hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2 text-text"
+              >
+                <span>Create Free Account</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Value Metrics Bar */}
+          <div className="max-w-6xl mx-auto mt-16 grid grid-cols-2 md:grid-cols-4 gap-5 animate-fade-in delay-3 relative z-10">
+            <div className="liquid-glass p-6 rounded-3xl text-center hover:-translate-y-1 transition-all duration-300">
+              <p className="text-2xl sm:text-3xl font-black text-accent font-sans">Adaptive Probing</p>
+              <p className="text-xs text-muted/80 mt-1 font-medium">Dynamic Multi-Turn Logic</p>
+            </div>
+            <div className="liquid-glass p-6 rounded-3xl text-center hover:-translate-y-1 transition-all duration-300">
+              <p className="text-2xl sm:text-3xl font-black text-text font-sans">Intent Memory</p>
+              <p className="text-xs text-muted/80 mt-1 font-medium font-mono">Breeth AI Layer</p>
+            </div>
+            <div className="liquid-glass p-6 rounded-3xl text-center hover:-translate-y-1 transition-all duration-300">
+              <p className="text-2xl sm:text-3xl font-black text-success font-sans">Depth Detection</p>
+              <p className="text-xs text-muted/80 mt-1 font-medium">Real-Time Rigor Verification</p>
+            </div>
+            <div className="liquid-glass p-6 rounded-3xl text-center hover:-translate-y-1 transition-all duration-300">
+              <p className="text-2xl sm:text-3xl font-black text-text font-mono">0 - 100 Score</p>
+              <p className="text-xs text-muted/80 mt-1 font-medium">Calibrated Assessment Rubric</p>
+            </div>
+          </div>
+        </section>
+
+        {/* Footer */}
+        <footer className="border-t border-white/10 bg-canvas/30 backdrop-blur-xl py-8 px-6">
+          <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between text-xs text-muted/70 gap-4">
+            <p>© 2026 Caliber AI Inc. All rights reserved.</p>
+            <div className="flex items-center gap-6">
+              <span>Terms of Service</span>
+              <span>Privacy Policy</span>
+              <span>Security</span>
+            </div>
+          </div>
+        </footer>
+      </main>
+    );
+  }
+
+  // ──────────────────────────────────────────────
+  // MODE B: AUTHENTICATED EXECUTIVE WORKSPACE (LEFT SIDEBAR)
+  // ──────────────────────────────────────────────
   return (
     <div className="flex h-screen bg-[#08090A] text-text overflow-hidden font-sans selection:bg-accent selection:text-white">
       
-      {/* ─── EXECUTIVE LEFT SIDEBAR (LINEAR / VERCEL STYLE) ─── */}
+      {/* EXECUTIVE LEFT SIDEBAR NAVIGATION */}
       <aside className="w-64 bg-[#0d0f14] border-r border-white/10 flex flex-col justify-between shrink-0 z-30 select-none">
         
-        {/* Brand Header */}
+        {/* Brand Emblem */}
         <div>
           <div className="h-16 px-5 border-b border-white/10 flex items-center gap-3">
             <img 
@@ -224,7 +360,7 @@ export default function WorkspaceLayoutPage() {
             </div>
           </div>
 
-          {/* Navigation Items */}
+          {/* Sidebar Tabs */}
           <nav className="p-3 space-y-1.5 mt-2">
             <button
               onClick={() => setActiveTab("DASHBOARD")}
@@ -266,7 +402,7 @@ export default function WorkspaceLayoutPage() {
           </nav>
         </div>
 
-        {/* User Account / Footer */}
+        {/* User Account / Sign Out Capsule */}
         <div className="p-3 border-t border-white/10 space-y-2">
           <div className="bg-white/5 p-3 rounded-2xl border border-white/10 flex items-center justify-between">
             <div className="flex items-center gap-2.5 overflow-hidden">
@@ -279,32 +415,26 @@ export default function WorkspaceLayoutPage() {
               </div>
             </div>
 
-            {isAuthenticated ? (
-              <button
-                onClick={logout}
-                title="Sign Out"
-                className="p-1.5 rounded-xl hover:bg-red-500/20 text-muted hover:text-red-400 transition-colors shrink-0"
-              >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
-                </svg>
-              </button>
-            ) : (
-              <button
-                onClick={() => openAuthModal("LOGIN")}
-                className="px-2.5 py-1 rounded-xl bg-accent text-white text-[11px] font-bold shadow-md hover:bg-accent-hover transition-colors"
-              >
-                Sign In
-              </button>
-            )}
+            <button
+              onClick={() => {
+                logout();
+                setViewState("LANDING");
+              }}
+              title="Sign Out to Landing Page"
+              className="p-1.5 rounded-xl hover:bg-red-500/20 text-muted hover:text-red-400 transition-colors shrink-0"
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+              </svg>
+            </button>
           </div>
         </div>
       </aside>
 
-      {/* ─── MAIN WORKSPACE CONTENT AREA ─── */}
+      {/* MAIN WORKSPACE CONTENT AREA */}
       <main className="flex-1 flex flex-col h-full overflow-y-auto relative bg-[#08090A]">
         
-        {/* Workspace Top Header Bar */}
+        {/* Workspace Top Bar */}
         <header className="h-16 border-b border-white/10 px-8 flex items-center justify-between sticky top-0 bg-[#08090A]/90 backdrop-blur-xl z-20 shrink-0">
           <div className="flex items-center gap-3">
             <span className="text-xs font-mono text-muted uppercase tracking-wider font-semibold">Workspace</span>
@@ -322,14 +452,13 @@ export default function WorkspaceLayoutPage() {
           </div>
         </header>
 
-        {/* ─── TAB 1: PERSONALIZED CANDIDATE DASHBOARD ─── */}
+        {/* TAB 1: PERSONALIZED CANDIDATE DASHBOARD */}
         {activeTab === "DASHBOARD" && (
           <div className="p-8 max-w-7xl mx-auto w-full space-y-8 animate-fade-in">
             
-            {/* Candidate Overview Card (World-Class Refined UI) */}
+            {/* Candidate Overview Header Card */}
             <div className="rounded-3xl bg-[#12141c] p-6 sm:p-8 border border-white/15 relative overflow-hidden shadow-2xl space-y-6">
               
-              {/* Top Banner Row */}
               <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-5">
                 <div className="flex items-center gap-3">
                   <span className="px-3 py-1 rounded-full bg-accent/20 border border-accent/40 text-accent font-mono text-xs font-black uppercase tracking-wider">
@@ -345,10 +474,7 @@ export default function WorkspaceLayoutPage() {
                 </div>
               </div>
 
-              {/* Main Candidate Card Body */}
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-                
-                {/* Candidate Selection & Info (Cols 7) */}
                 <div className="lg:col-span-7 space-y-4">
                   <div className="flex items-center gap-4">
                     <div className="w-14 h-14 rounded-2xl bg-accent/20 border border-accent/40 text-accent text-2xl font-black flex items-center justify-center shadow-lg shrink-0">
@@ -358,7 +484,6 @@ export default function WorkspaceLayoutPage() {
                     <div className="flex-1 relative">
                       <p className="text-xs text-muted font-mono uppercase tracking-wider mb-1 font-semibold">Active Candidate Profile</p>
                       
-                      {/* Custom Glass Candidate Switcher Button */}
                       <button
                         onClick={() => setCandidateDropdownOpen(!candidateDropdownOpen)}
                         className="w-full flex items-center justify-between px-4 py-2.5 rounded-2xl bg-[#1a1d28] border border-white/20 text-white font-extrabold text-lg hover:border-accent/60 transition-all text-left shadow-inner"
@@ -371,7 +496,6 @@ export default function WorkspaceLayoutPage() {
                         </svg>
                       </button>
 
-                      {/* Dropdown Options List */}
                       {candidateDropdownOpen && (
                         <>
                           <div className="fixed inset-0 z-40" onClick={() => setCandidateDropdownOpen(false)} />
@@ -410,11 +534,8 @@ export default function WorkspaceLayoutPage() {
                   </div>
                 </div>
 
-                {/* Readiness Score Index Box (Cols 5) */}
                 <div className="lg:col-span-5 bg-[#181b26] p-5 rounded-2xl border border-white/10 flex items-center justify-between shadow-inner">
                   <div className="flex items-center gap-4">
-                    
-                    {/* SVG Circular Readiness Gauge */}
                     <div className="relative w-16 h-16 flex items-center justify-center shrink-0">
                       <svg className="w-16 h-16 transform -rotate-90">
                         <circle cx="32" cy="32" r="26" stroke="currentColor" strokeWidth="6" className="text-white/10" fill="transparent" />
@@ -453,10 +574,8 @@ export default function WorkspaceLayoutPage() {
                     <p className="text-[10px] text-accent font-bold mt-0.5">90% Done</p>
                   </div>
                 </div>
-
               </div>
 
-              {/* Action Buttons Row */}
               <div className="pt-5 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
                   <button
@@ -481,10 +600,9 @@ export default function WorkspaceLayoutPage() {
                   Adaptive Multi-Turn State Graph • Gemini 2.0 Flash
                 </p>
               </div>
-
             </div>
 
-            {/* Competency Matrix Grid (5 Modules) */}
+            {/* Competency Matrix */}
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div>
@@ -554,7 +672,7 @@ export default function WorkspaceLayoutPage() {
               </div>
             </div>
 
-            {/* Breeth AI Cognitive Profile Card */}
+            {/* Breeth AI Cognitive Profile */}
             <div className="rounded-3xl bg-[#12141c] p-6 sm:p-8 border border-white/15 shadow-2xl space-y-6">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-5">
                 <div className="flex items-center gap-3">
@@ -691,7 +809,7 @@ export default function WorkspaceLayoutPage() {
           </div>
         )}
 
-        {/* ─── TAB 2: DEMO CANDIDATES DIRECTORY ─── */}
+        {/* TAB 2: DEMO CANDIDATES DIRECTORY */}
         {activeTab === "CANDIDATES" && (
           <div className="p-8 max-w-7xl mx-auto w-full space-y-8 animate-fade-in">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-white/10">
@@ -705,7 +823,6 @@ export default function WorkspaceLayoutPage() {
                 </p>
               </div>
 
-              {/* Role Filter Tabs */}
               <div className="flex items-center gap-1.5 p-1.5 rounded-2xl bg-[#12141c] border border-white/10 text-xs shrink-0">
                 {["ALL", "DATA", "ENGINEER", "BACKEND"].map((tab) => (
                   <button
@@ -723,7 +840,6 @@ export default function WorkspaceLayoutPage() {
               </div>
             </div>
 
-            {/* Search Input */}
             <div className="max-w-md">
               <div className="relative">
                 <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted/70" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -741,7 +857,6 @@ export default function WorkspaceLayoutPage() {
               </div>
             </div>
 
-            {/* Directory Cards Grid */}
             {loadingCandidates ? (
               <div className="flex items-center justify-center py-24">
                 <div className="flex flex-col items-center gap-4">
@@ -795,7 +910,7 @@ export default function WorkspaceLayoutPage() {
 
       </main>
 
-      {/* Loading Overlay when starting interview */}
+      {/* Loading Overlay */}
       {starting && (
         <div className="fixed inset-0 z-50 bg-[#08090A]/80 backdrop-blur-2xl flex items-center justify-center">
           <div className="flex flex-col items-center gap-5 p-8 rounded-3xl bg-[#12141c] border border-white/20 shadow-2xl text-center max-w-sm animate-fade-in">

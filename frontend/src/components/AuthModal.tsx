@@ -18,9 +18,9 @@ export default function AuthModal() {
   } = useAuth();
 
   // Form states
-  const [name, setName] = useState("Alex Morgan");
-  const [email, setEmail] = useState("alex.morgan@caliber.ai");
-  const [password, setPassword] = useState("••••••••••••");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [role, setRole] = useState("Lead Hiring Manager");
   const [showPassword, setShowPassword] = useState(false);
 
@@ -34,11 +34,14 @@ export default function AuthModal() {
   // Reset inputs when modal opens
   useEffect(() => {
     if (isAuthModalOpen) {
+      setName("");
+      setEmail("");
+      setPassword("");
       setOtpDigits(["", "", "", "", "", ""]);
       setOtpError("");
       setCountdown(30);
     }
-  }, [isAuthModalOpen, authStep]);
+  }, [isAuthModalOpen]);
 
   // Countdown timer for OTP resend
   useEffect(() => {
@@ -212,6 +215,13 @@ export default function AuthModal() {
               >
                 Send Verification Code →
               </button>
+              <button
+                type="button"
+                onClick={handleQuickDemoFill}
+                className="w-full py-2.5 rounded-2xl liquid-glass-pill text-xs font-bold text-accent border border-accent/35 hover:-translate-y-0.5 transition-all duration-300"
+              >
+                ⚡ Quick Fill Demo Credentials
+              </button>
             </div>
 
             <div className="text-center pt-2 border-t border-white/10">
@@ -304,6 +314,13 @@ export default function AuthModal() {
               >
                 Continue to OTP Verification →
               </button>
+              <button
+                type="button"
+                onClick={handleQuickDemoFill}
+                className="w-full py-2.5 rounded-2xl liquid-glass-pill text-xs font-bold text-accent border border-accent/35 hover:-translate-y-0.5 transition-all duration-300"
+              >
+                ⚡ Quick Fill Demo Credentials
+              </button>
             </div>
 
             <div className="text-center pt-2 border-t border-white/10">
@@ -379,6 +396,13 @@ export default function AuthModal() {
                 className="w-full py-3.5 rounded-2xl bg-accent text-white font-bold text-xs shadow-xl shadow-accent/25 hover:bg-accent-hover hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isVerifying ? "Verifying Code..." : "Verify & Sign In →"}
+              </button>
+              <button
+                type="button"
+                onClick={handleQuickDemoFill}
+                className="w-full py-2.5 rounded-2xl liquid-glass-pill text-xs font-bold text-accent border border-accent/35 hover:-translate-y-0.5 transition-all duration-300"
+              >
+                ⚡ Auto-fill Code (123456)
               </button>
             </div>
 

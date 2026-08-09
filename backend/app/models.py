@@ -123,3 +123,43 @@ class AssessmentReport(BaseModel):
     total_questions: int
     total_days_covered: int
     interview_duration_turns: int
+
+
+# ──────────────────────────────────────────────
+# Personalized Candidate Dashboard Models
+# ──────────────────────────────────────────────
+
+class CompetencyModule(BaseModel):
+    module_id: str
+    title: str
+    days_range: str
+    status: str  # Mastered, In Progress, Needs Review
+    score: float = Field(..., ge=0, le=100)
+    key_skills: list[str]
+
+
+class BreethCognitiveProfile(BaseModel):
+    summary: str
+    strengths: list[str]
+    knowledge_gaps: list[str]
+    reasoning_patterns: list[str]
+
+
+class SessionHistoryItem(BaseModel):
+    session_id: str
+    date: str
+    questions_asked: int
+    covered_days: int
+    aggregate_score: float
+    status: str
+
+
+class CandidateDashboardResponse(BaseModel):
+    candidate: CandidateData
+    readiness_score: float = Field(..., ge=0, le=100)
+    completed_curriculum_days: int
+    total_curriculum_days: int = 31
+    competency_matrix: list[CompetencyModule]
+    cognitive_profile: BreethCognitiveProfile
+    session_history: list[SessionHistoryItem]
+

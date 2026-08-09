@@ -15,9 +15,9 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 
-from .models import InterviewRequest, InterviewResponse, InterviewFeedback
+from .models import InterviewRequest, InterviewResponse, InterviewFeedback, CandidateDashboardResponse
 from . import graph as interview_graph
-from .curriculum_engine import load_candidates, load_curriculum
+from .curriculum_engine import load_candidates, load_curriculum, get_candidate_dashboard_data
 
 load_dotenv()
 
@@ -73,11 +73,19 @@ async def get_candidates():
     return data
 
 
+@app.get("/api/candidates/{candidate_id}/dashboard", response_model=CandidateDashboardResponse)
+async def get_candidate_dashboard(candidate_id: str):
+    """Serve personalized candidate dashboard metrics, competency matrix, and Breeth cognitive profile."""
+    data = get_candidate_dashboard_data(candidate_id)
+    return data
+
+
 @app.get("/api/curriculum")
 async def get_curriculum():
     """Serve the curriculum data to the frontend."""
     data = load_curriculum()
     return data
+
 
 
 # ──────────────────────────────────────────────

@@ -652,7 +652,7 @@ export default function AppEntryPage() {
           <div className="p-8 max-w-7xl mx-auto w-full space-y-8 animate-fade-in">
             
             {/* Candidate Overview Header Card */}
-            <div className="rounded-3xl liquid-glass-elevated p-6 sm:p-8 border border-white/20 relative overflow-hidden shadow-2xl space-y-6">
+            <div className="rounded-3xl liquid-glass-elevated p-6 sm:p-8 border border-white/20 relative shadow-2xl space-y-6">
               
               <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-5">
                 <div className="flex items-center gap-3">
@@ -682,7 +682,7 @@ export default function AppEntryPage() {
                       {/* Custom Liquid Glass Candidate Switcher Button */}
                       <button
                         onClick={() => setCandidateDropdownOpen(!candidateDropdownOpen)}
-                        className="w-full flex items-center justify-between px-4 py-2.5 rounded-2xl liquid-glass border border-white/25 text-white font-extrabold text-lg hover:border-accent/60 transition-all text-left shadow-lg"
+                        className="w-full flex items-center justify-between px-4 py-3 rounded-2xl liquid-glass border border-white/25 text-white font-extrabold text-lg hover:border-accent/60 transition-all text-left shadow-lg"
                       >
                         <span className="truncate">
                           {dashboardData?.candidate.member.name || activeCandidate?.member?.name} ({activeCandidate?.member?.id || selectedCandidateId})
@@ -696,7 +696,7 @@ export default function AppEntryPage() {
                       {candidateDropdownOpen && (
                         <>
                           <div className="fixed inset-0 z-40" onClick={() => setCandidateDropdownOpen(false)} />
-                          <div className="absolute left-0 top-full mt-2 w-full rounded-2xl liquid-glass-elevated border border-white/20 p-2 shadow-2xl z-50 animate-fade-in max-h-60 overflow-y-auto backdrop-blur-3xl">
+                          <div className="absolute left-0 top-full mt-2 w-full min-w-[320px] rounded-2xl bg-[#141517]/95 border border-white/25 p-2.5 shadow-[0_20px_60px_rgba(0,0,0,0.8)] z-[100] animate-fade-in max-h-64 overflow-y-auto backdrop-blur-3xl space-y-1">
                             {candidates.map((c) => (
                               <button
                                 key={c.member.id}
@@ -704,14 +704,20 @@ export default function AppEntryPage() {
                                   setSelectedCandidateId(c.member.id);
                                   setCandidateDropdownOpen(false);
                                 }}
-                                className={`w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-bold flex items-center justify-between transition-colors ${
+                                className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold flex items-center justify-between transition-all ${
                                   c.member.id === selectedCandidateId
-                                    ? "bg-accent text-white shadow-md shadow-accent/25"
+                                    ? "bg-accent text-white shadow-lg shadow-accent/30 border border-white/20"
                                     : "text-gray-200 hover:bg-white/15 hover:text-white"
                                 }`}
                               >
-                                <span>{c.member.name} ({c.member.id})</span>
-                                <span className="text-[10px] font-mono text-muted">{c.member.jobRole}</span>
+                                <span className="font-extrabold">{c.member.name} ({c.member.id})</span>
+                                <span className={`text-[10px] font-mono px-2 py-0.5 rounded-md ${
+                                  c.member.id === selectedCandidateId
+                                    ? "bg-black/30 text-white font-bold"
+                                    : "text-gray-400 bg-white/5"
+                                }`}>
+                                  {c.member.jobRole}
+                                </span>
                               </button>
                             ))}
                           </div>
@@ -732,26 +738,26 @@ export default function AppEntryPage() {
                 </div>
 
                 {/* Readiness Score Index Liquid Glass Box */}
-                <div className="lg:col-span-5 liquid-glass-accent p-5 rounded-2xl border border-accent/30 flex items-center justify-between shadow-xl">
+                <div className="lg:col-span-5 liquid-glass-accent p-6 rounded-2xl border border-accent/30 flex items-center justify-between shadow-xl">
                   <div className="flex items-center gap-4">
-                    <div className="relative w-16 h-16 flex items-center justify-center shrink-0">
-                      <svg className="w-16 h-16 transform -rotate-90">
-                        <circle cx="32" cy="32" r="26" stroke="currentColor" strokeWidth="6" className="text-white/10" fill="transparent" />
+                    <div className="relative w-20 h-20 flex items-center justify-center shrink-0">
+                      <svg className="w-20 h-20 transform -rotate-90" viewBox="0 0 80 80">
+                        <circle cx="40" cy="40" r="32" stroke="currentColor" strokeWidth="6" className="text-white/10" fill="transparent" />
                         <circle
-                          cx="32"
-                          cy="32"
-                          r="26"
+                          cx="40"
+                          cy="40"
+                          r="32"
                           stroke="currentColor"
                           strokeWidth="6"
                           className="text-accent transition-all duration-1000 ease-out"
                           fill="transparent"
-                          strokeDasharray={163}
-                          strokeDashoffset={163 - (163 * (dashboardData?.readiness_score || 88)) / 100}
+                          strokeDasharray={201}
+                          strokeDashoffset={201 - (201 * (dashboardData?.readiness_score || 88)) / 100}
                           strokeLinecap="round"
                         />
                       </svg>
-                      <span className="absolute text-sm font-black text-white font-mono">
-                        {dashboardData?.readiness_score || 88}%
+                      <span className="absolute text-base font-black text-white font-mono tracking-tight">
+                        {Math.round(dashboardData?.readiness_score || 88)}%
                       </span>
                     </div>
 

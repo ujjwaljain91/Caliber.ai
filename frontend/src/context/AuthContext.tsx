@@ -15,6 +15,7 @@ interface AuthContextType {
   isAuthModalOpen: boolean;
   authStep: "LOGIN" | "REGISTER" | "OTP";
   pendingUser: { name?: string; email?: string; role?: string } | null;
+  justLoggedIn: boolean;
   openAuthModal: (step?: "LOGIN" | "REGISTER") => void;
   closeAuthModal: () => void;
   setAuthStep: (step: "LOGIN" | "REGISTER" | "OTP") => void;
@@ -22,6 +23,7 @@ interface AuthContextType {
   register: (name: string, email: string, pass: string, role: string) => Promise<boolean>;
   verifyOTP: (otp: string) => Promise<boolean>;
   logout: () => void;
+  clearJustLoggedIn: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -38,6 +40,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authStep, setAuthStep] = useState<"LOGIN" | "REGISTER" | "OTP">("LOGIN");
   const [pendingUser, setPendingUser] = useState<{ name?: string; email?: string; role?: string } | null>(null);
+  const [justLoggedIn, setJustLoggedIn] = useState(false);
 
   useEffect(() => {
     // Check localStorage for saved session
@@ -90,6 +93,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       };
       setUser(newUser);
       localStorage.setItem("caliber_user", JSON.stringify(newUser));
+      setJustLoggedIn(true);
       closeAuthModal();
       return true;
     }
@@ -99,9 +103,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   function logout() {
     setUser(null);
     localStorage.removeItem("caliber_user");
+    setJustLoggedIn(false);
     if (typeof window !== "undefined") {
       window.location.href = "/";
     }
+  }
+
+  function clearJustLoggedIn() {
+    setJustLoggedIn(false);
   }
 
   return (
@@ -112,6 +121,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         isAuthModalOpen,
         authStep,
         pendingUser,
+        justLoggedIn,
         openAuthModal,
         closeAuthModal,
         setAuthStep,
@@ -119,6 +129,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         register,
         verifyOTP,
         logout,
+        clearJustLoggedIn,
       }}
     >
       {children}

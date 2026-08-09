@@ -67,7 +67,7 @@ const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
 export default function AppEntryPage() {
   const router = useRouter();
-  const { user, isAuthenticated, openAuthModal, logout } = useAuth();
+  const { user, isAuthenticated, openAuthModal, logout, justLoggedIn, clearJustLoggedIn } = useAuth();
   
   // viewState: "LANDING" (unauthenticated public landing page) | "WORKSPACE" (authenticated liquid glass workspace)
   const [viewState, setViewState] = useState<"LANDING" | "WORKSPACE">("LANDING");
@@ -93,6 +93,14 @@ export default function AppEntryPage() {
       setViewState("LANDING");
     }
   }, [isAuthenticated]);
+
+  // Transition to workspace if user just completed login/registration modal flow
+  useEffect(() => {
+    if (isAuthenticated && justLoggedIn) {
+      setViewState("WORKSPACE");
+      clearJustLoggedIn();
+    }
+  }, [isAuthenticated, justLoggedIn]);
 
   useEffect(() => {
     if (viewState === "WORKSPACE" && selectedCandidateId) {

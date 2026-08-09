@@ -88,9 +88,7 @@ export default function AppEntryPage() {
   }, []);
 
   useEffect(() => {
-    if (isAuthenticated) {
-      setViewState("WORKSPACE");
-    } else {
+    if (!isAuthenticated) {
       setViewState("LANDING");
     }
   }, [isAuthenticated]);
@@ -253,18 +251,29 @@ export default function AppEntryPage() {
             </nav>
 
             <div className="flex items-center gap-3">
-              <button
-                onClick={() => openAuthModal("LOGIN")}
-                className="px-4 py-2 rounded-2xl liquid-glass-pill text-xs font-semibold text-text hover:text-white transition-colors"
-              >
-                Sign In
-              </button>
-              <button
-                onClick={() => openAuthModal("REGISTER")}
-                className="px-5 py-2.5 rounded-2xl bg-accent text-white font-bold text-xs shadow-xl shadow-accent/25 hover:bg-accent-hover transition-all hover:-translate-y-0.5"
-              >
-                Create Account →
-              </button>
+              {isAuthenticated ? (
+                <button
+                  onClick={() => setViewState("WORKSPACE")}
+                  className="px-5 py-2.5 rounded-2xl bg-accent text-white font-bold text-xs shadow-xl shadow-accent/25 hover:bg-accent-hover transition-all hover:-translate-y-0.5"
+                >
+                  Launch Dashboard →
+                </button>
+              ) : (
+                <>
+                  <button
+                    onClick={() => openAuthModal("LOGIN")}
+                    className="px-4 py-2 rounded-2xl liquid-glass-pill text-xs font-semibold text-text hover:text-white transition-colors"
+                  >
+                    Sign In
+                  </button>
+                  <button
+                    onClick={() => openAuthModal("REGISTER")}
+                    className="px-5 py-2.5 rounded-2xl bg-accent text-white font-bold text-xs shadow-xl shadow-accent/25 hover:bg-accent-hover transition-all hover:-translate-y-0.5"
+                  >
+                    Create Account →
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </header>
@@ -289,19 +298,30 @@ export default function AppEntryPage() {
             </p>
 
             <div className="pt-6 flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up delay-2">
-              <button
-                onClick={() => openAuthModal("LOGIN")}
-                className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-accent text-white font-bold text-sm shadow-2xl shadow-accent/30 hover:bg-accent-hover hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2"
-              >
-                <span>Sign In to Candidate Dashboard →</span>
-              </button>
+              {isAuthenticated ? (
+                <button
+                  onClick={() => setViewState("WORKSPACE")}
+                  className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-accent text-white font-bold text-sm shadow-2xl shadow-accent/30 hover:bg-accent-hover hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2"
+                >
+                  <span>Launch Candidate Workspace →</span>
+                </button>
+              ) : (
+                <>
+                  <button
+                    onClick={() => openAuthModal("LOGIN")}
+                    className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-accent text-white font-bold text-sm shadow-2xl shadow-accent/30 hover:bg-accent-hover hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2"
+                  >
+                    <span>Sign In to Candidate Dashboard →</span>
+                  </button>
 
-              <button
-                onClick={() => openAuthModal("REGISTER")}
-                className="w-full sm:w-auto px-8 py-4 rounded-2xl liquid-glass-pill font-semibold text-sm hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2 text-text"
-              >
-                <span>Create Free Account</span>
-              </button>
+                  <button
+                    onClick={() => openAuthModal("REGISTER")}
+                    className="w-full sm:w-auto px-8 py-4 rounded-2xl liquid-glass-pill font-semibold text-sm hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2 text-text"
+                  >
+                    <span>Create Free Account</span>
+                  </button>
+                </>
+              )}
             </div>
           </div>
 

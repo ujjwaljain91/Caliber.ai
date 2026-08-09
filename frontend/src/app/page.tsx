@@ -549,7 +549,7 @@ export default function AppEntryPage() {
             />
             <div className="flex flex-col">
               <span className="text-sm font-black tracking-wider text-white font-mono leading-none">CALIBER AI</span>
-              <span className="text-[10px] text-accent font-extrabold tracking-widest uppercase mt-0.5">Assessor Studio</span>
+              <span className="text-[10px] text-accent font-extrabold tracking-widest uppercase mt-0.5">Interview Studio</span>
             </div>
           </div>
 
@@ -628,20 +628,39 @@ export default function AppEntryPage() {
       <main className="flex-1 flex flex-col h-full overflow-y-auto relative z-10">
         
         {/* Workspace Top Header Bar */}
-        <header className="h-16 border-b border-white/15 px-8 flex items-center justify-between sticky top-0 liquid-glass-elevated z-20 shrink-0 backdrop-blur-2xl">
-          <div className="flex items-center gap-3">
-            <span className="text-xs font-mono text-muted uppercase tracking-wider font-semibold">Workspace</span>
-            <span className="text-muted/40">/</span>
-            <span className="text-xs font-bold text-white tracking-tight font-sans">
-              {activeTab === "DASHBOARD" ? "Personalized Candidate Dashboard" : "Demo Candidates Directory"}
+        <header className="h-14 border-b border-white/10 px-6 flex items-center justify-between sticky top-0 liquid-glass-elevated z-20 shrink-0 backdrop-blur-2xl">
+          {/* Breadcrumb */}
+          <div className="flex items-center gap-2">
+            <span className="text-[11px] font-mono text-muted/70 uppercase tracking-widest font-semibold">Workspace</span>
+            <svg className="w-3 h-3 text-muted/30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+            <span className="text-[11px] font-semibold text-white/90 tracking-tight">
+              {activeTab === "DASHBOARD" ? "Candidate Dashboard" : "Candidates Directory"}
             </span>
           </div>
 
-          <div className="flex items-center gap-4 text-xs font-mono">
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full liquid-glass-success text-emerald-400 font-semibold border border-emerald-500/30 shadow-md">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+          {/* Right Controls */}
+          <div className="flex items-center gap-3">
+            {/* Search */}
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl liquid-glass border border-white/10 text-muted/60 hover:border-white/20 hover:text-muted transition-all cursor-pointer group">
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" /></svg>
+              <span className="text-[10px] font-medium tracking-wide">Search</span>
+              <kbd className="hidden sm:inline text-[9px] font-mono bg-white/5 border border-white/10 rounded px-1 py-0.5 text-muted/40 ml-2">⌘K</kbd>
+            </div>
+
+            {/* Divider */}
+            <div className="w-px h-5 bg-white/10" />
+
+            {/* Engine Status */}
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-emerald-400 text-[10px] font-semibold font-mono border border-emerald-500/20 bg-emerald-500/5">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
               Assessment Engine: Active
             </div>
+
+            {/* Notification Bell */}
+            <button className="relative p-1.5 rounded-lg hover:bg-white/5 text-muted/60 hover:text-white/80 transition-colors">
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}><path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" /></svg>
+              <span className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-accent" />
+            </button>
           </div>
         </header>
 

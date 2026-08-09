@@ -94,11 +94,25 @@ export default function AppEntryPage() {
     }
   }, [isAuthenticated]);
 
-  // Transition to workspace if user just completed login/registration modal flow
+  // Transition to workspace if user just completed login/registration modal flow or returned from report with ?view=dashboard
   useEffect(() => {
-    if (isAuthenticated && justLoggedIn) {
-      setViewState("WORKSPACE");
-      clearJustLoggedIn();
+    if (isAuthenticated) {
+      if (justLoggedIn) {
+        setViewState("WORKSPACE");
+        clearJustLoggedIn();
+      }
+      if (typeof window !== "undefined") {
+        const params = new URLSearchParams(window.location.search);
+        const viewParam = params.get("view");
+        if (viewParam === "dashboard" || viewParam === "workspace" || viewParam === "candidates") {
+          setViewState("WORKSPACE");
+          if (viewParam === "candidates") {
+            setActiveTab("CANDIDATES");
+          } else {
+            setActiveTab("DASHBOARD");
+          }
+        }
+      }
     }
   }, [isAuthenticated, justLoggedIn]);
 
@@ -260,23 +274,15 @@ export default function AppEntryPage() {
             </nav>
 
             <div className="flex items-center gap-3">
-              {isAuthenticated && (
-                <button
-                  onClick={() => setViewState("WORKSPACE")}
-                  className="px-4 py-2 rounded-2xl bg-accent/20 text-accent font-bold text-xs border border-accent/40 hover:bg-accent hover:text-white transition-all shadow-lg"
-                >
-                  Go to Dashboard 🚀
-                </button>
-              )}
               <button
                 onClick={() => openAuthModal("LOGIN")}
-                className="px-4 py-2 rounded-2xl liquid-glass-pill text-xs font-semibold text-text hover:text-white transition-colors"
+                className="px-4 py-2 rounded-2xl liquid-glass-pill text-xs font-semibold text-text hover:text-white transition-colors cursor-pointer"
               >
                 Sign In
               </button>
               <button
                 onClick={() => openAuthModal("REGISTER")}
-                className="px-5 py-2.5 rounded-2xl bg-accent text-white font-bold text-xs shadow-xl shadow-accent/25 hover:bg-accent-hover transition-all hover:-translate-y-0.5"
+                className="px-5 py-2.5 rounded-2xl bg-accent text-white font-bold text-xs shadow-xl shadow-accent/25 hover:bg-accent-hover transition-all hover:-translate-y-0.5 cursor-pointer"
               >
                 Create Account →
               </button>
@@ -304,24 +310,16 @@ export default function AppEntryPage() {
             </p>
 
             <div className="pt-6 flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up delay-2">
-              {isAuthenticated && (
-                <button
-                  onClick={() => setViewState("WORKSPACE")}
-                  className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-accent text-white font-bold text-sm shadow-2xl shadow-accent/30 hover:bg-accent-hover hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2"
-                >
-                  <span>Launch Candidate Workspace 🚀</span>
-                </button>
-              )}
               <button
                 onClick={() => openAuthModal("LOGIN")}
-                className="w-full sm:w-auto px-8 py-4 rounded-2xl liquid-glass-pill font-semibold text-sm hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2 text-text"
+                className="w-full sm:w-auto px-8 py-4 rounded-2xl liquid-glass-pill font-semibold text-sm hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2 text-text cursor-pointer"
               >
                 <span>Sign In to Candidate Dashboard</span>
               </button>
 
               <button
                 onClick={() => openAuthModal("REGISTER")}
-                className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-accent/20 border border-accent/40 font-bold text-sm text-white hover:bg-accent transition-all duration-300 flex items-center justify-center gap-2"
+                className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-accent/20 border border-accent/40 font-bold text-sm text-white hover:bg-accent transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
               >
                 <span>Create Free Account →</span>
               </button>

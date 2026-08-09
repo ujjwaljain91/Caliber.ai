@@ -312,7 +312,7 @@ export default function InterviewPage() {
             </div>
 
             <button
-              onClick={() => router.push("/?view=candidates")}
+              onClick={() => router.push("/?view=dashboard")}
               className="w-full py-2 rounded-xl bg-accent text-white font-bold text-[11px] shadow-lg shadow-accent/20 hover:bg-accent-hover hover:-translate-y-0.5 transition-all flex items-center justify-center gap-1.5"
             >
               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -417,7 +417,7 @@ export default function InterviewPage() {
 
               {/* Back */}
               <button
-                onClick={() => router.push("/?view=candidates")}
+                onClick={() => router.push("/?view=dashboard")}
                 className="w-7 h-7 rounded-lg text-muted/60 hover:text-text flex items-center justify-center"
               >
                 <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

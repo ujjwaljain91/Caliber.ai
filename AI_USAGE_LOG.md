@@ -11,7 +11,7 @@
 - **Alternative Considered**: LangChain's AgentExecutor. Rejected because it's designed for tool-use agents, not structured interview workflows with strict invariant enforcement.
 
 ### Decision 2: Google Gemini 2.0 Flash as LLM Provider
-- **Rationale**: Free-tier availability, fast inference, good instruction-following for structured JSON outputs, and native async support via `langchain-google-genai`.
+- **Rationale**: Fast inference, good instruction-following for structured JSON outputs, and native async support via `langchain-google-genai`.
 - **API Used**: `gemini-2.0-flash` via `ChatGoogleGenerativeAI`
 
 ### Decision 3: Breeth AI as Intent-Aware Memory Layer
@@ -20,9 +20,13 @@
   1. `evaluate_response` node → Sends each Q&A pair to `POST /v1/episodes` with `extract_intent: true`
   2. `generate_question` node → Queries `POST /v1/search` before each question to avoid redundancy
 
-### Decision 4: Next.js 14 App Router + Tailwind CSS v4
-- **Rationale**: App Router provides server components, streaming, and file-based routing. Tailwind v4 uses CSS-first `@theme` configuration for design tokens in OKLCH/Hex space.
-- **Design System**: Inspired by Linear, Vercel, and Supabase — high-contrast dark mode with glassmorphism and micro-animations.
+### Decision 4: Next.js 16 App Router + Tailwind CSS v4 + Apple Liquid Glass System
+- **Rationale**: Next.js App Router provides server components, streaming, and file-based routing. Tailwind v4 uses CSS-first `@theme` configuration for design tokens in OKLCH/Hex space.
+- **Design System**: Inspired by Apple Liquid Glass, Linear, Vercel, and Supabase — dark mode (#08090A) with vibrant YC Vermilion accents (#FF4000), glassmorphism (`backdrop-filter: blur(40px)`), and ambient refracted light orbs.
+
+### Decision 5: Dedicated Backend Candidate Dashboard API
+- **Rationale**: Decouple curriculum evaluation state from frontend layout. Pydantic models compute readiness scores, module mastery metrics, Breeth cognitive trajectories, and assessment session history.
+- **Endpoint**: `GET /api/candidates/{candidate_id}/dashboard`
 
 ---
 
@@ -81,6 +85,12 @@ Generates JSON assessment report with:
 | 2026-08-09 10:04 | Gemini History Sidebar | Added left candidate-scoped history drawer and right blueprint panels with sticky bottom input |
 | 2026-08-09 10:20 | Navigation Locking | Removed Home breadcrumb link to enforce logout before returning to landing page |
 | 2026-08-09 10:24 | Brand Logo Update | Overwrote default Next.js favicon.ico and public logos with custom uploaded brand logo |
+| 2026-08-09 11:30 | Dashboard Backend API | Built `GET /api/candidates/{id}/dashboard` returning readiness index, 5 competency modules, and Breeth cognitive profile |
+| 2026-08-09 11:55 | Liquid Dashboard UI | Implemented YC-level Candidate Dashboard with Executive Left Sidebar, SVG gauge dial, and session history |
+| 2026-08-09 12:15 | Landing Page Auth Flow | Implemented conditional viewState (`LANDING` vs `WORKSPACE`) with restored Capabilities grid, Workflow, and Liquid Footer |
+| 2026-08-09 12:40 | State Auth Redirect | Integrated `justLoggedIn` flag in `AuthContext` for seamless transition to workspace upon OTP verification |
+| 2026-08-09 13:10 | Netlify Routing Fix | Removed raw SPA rewrite rule in `netlify.toml` allowing `@netlify/plugin-nextjs` to serve JS chunks and SSR pages cleanly |
+| 2026-08-09 13:45 | Dashboard UI Polishing | Enlarged Readiness Gauge ring (80px x 80px) for inner breathing room, removed container clipping, and fixed dropdown text contrast |
 
 ---
 
@@ -110,5 +120,11 @@ style: improve OTP verification button disabled states and inline validation
 fix: set up automatically redirecting home view on logout
 refactor: remove redundant header navigation and home breadcrumbs
 feat: build desktop sidebar history drawer and assessment blueprint context panel
+feat: build candidate dashboard backend api and model schemas
+feat: implement apple liquid glass candidate dashboard with executive left sidebar
+feat: restore public marketing landing page features grid, workflow, and liquid footer
+fix: integrate justLoggedIn state trigger in auth context for clean workspace redirect
+fix: update netlify.toml configuration for nextjs asset loading
+style: enlarge readiness circle gauge and resolve candidate switcher dropdown text contrast
 docs: update ai usage log for hackathon compliance
 ```

@@ -32,26 +32,36 @@
 
 ## Stage 2: System Prompts
 
-### Question Generator Prompt
-Framed as a "Senior Staff AI Engineer" persona. Key instructions:
-- Ask ONE clear question at a time
-- Frame around real engineering scenarios, not textbook definitions
-- Adapt difficulty based on candidate's role and experience
-- Follow-up mode for shallow responses: probe trade-offs and failure modes
+### Question Generator Prompt (`QUESTION_GENERATOR_SYSTEM`)
+Framed as an experienced, supportive **Technical Interviewer** conducting a practical assessment. Key instructions:
+- **Medium Difficulty Level**: Ask clear, accessible, medium-difficulty questions — NOT overly complex or hyper-niche
+- Ask **ONE** clear question at a time (1–3 sentences max)
+- Frame around **real engineering scenarios** and practical trade-offs
+- **Non-repetitive**: Never ask a question overlapping with a previously asked question in the session
+- Follow-up mode for shallow responses: supportive medium-difficulty follow-up probing practical considerations
+- **Dynamic context injection**:
+  - Candidate profile (`{candidate_name}`, `{candidate_role}`, `{years_experience}`, `{education}`)
+  - Curriculum topic (`{topic_day}`, `{topic_title}`, `{module_title}`, `{topic_objectives}`, `{topic_tools}`)
+  - Session history (`{previous_questions}`)
+  - Breeth cognitive memory (`{breeth_context}`)
 
-### Response Evaluator Prompt
-Structured rubric scoring:
-- Depth (1-10): Implementation details, edge cases, nuances
-- Accuracy (1-10): Technical correctness
-- Trade-off Awareness (1-10): Alternatives, when approach would NOT work
-- Shallow detection: < 20 words OR no trade-off discussion
+### Response Evaluator Prompt (`RESPONSE_EVALUATOR_SYSTEM`)
+Structured rubric scoring with **strict JSON output**:
+- **Depth** (1–10): Implementation details, edge cases, nuances
+- **Accuracy** (1–10): Technical correctness, factual accuracy
+- **Trade-off Awareness** (1–10): Alternatives, when approach would NOT work
+- **Scoring Guide**: 1–3 (vague/incorrect), 4–6 (partial), 7–8 (solid), 9–10 (exceptional)
+- **Shallow detection**: < 20 words OR no trade-offs OR restates question / dictionary definition
+- **JSON output fields**: `depth_score`, `accuracy_score`, `tradeoff_score`, `is_shallow`, `reasoning`, `key_insight`
 
-### Feedback Synthesizer Prompt
-Generates JSON assessment report with:
-- Overall score (0-100) with category breakdowns
-- Per-topic mastery status (Passed/Needs Review/Failed)
-- Strengths, gaps, and next steps arrays
-- Breeth cognitive profile summary
+### Feedback Synthesizer Prompt (`FEEDBACK_SYNTHESIZER_SYSTEM`)
+Generates a comprehensive JSON assessment report with:
+- `overall_score` (0–100) with hire-readiness rubric (80–100 strong hire, 60–79 potential, 40–59 needs development, 0–39 not ready)
+- `summary`: 2–3 sentence executive summary
+- `strengths`, `gaps`, `next`: arrays of 3 items each
+- `category_scores`: weighted scores across Technical Depth, System Design Thinking, Trade-off Analysis, Communication Clarity, Breadth of Knowledge
+- `topic_assessments`: per-topic mastery status (`Passed` / `Needs Review` / `Failed`) with day, title, score, question count, and key insight
+- `breeth_cognitive_summary`: cognitive pattern summary from Breeth memory layer
 
 ---
 

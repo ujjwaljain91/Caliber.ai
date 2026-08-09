@@ -91,6 +91,12 @@ Generates JSON assessment report with:
 | 2026-08-09 12:40 | State Auth Redirect | Integrated `justLoggedIn` flag in `AuthContext` for seamless transition to workspace upon OTP verification |
 | 2026-08-09 13:10 | Netlify Routing Fix | Removed raw SPA rewrite rule in `netlify.toml` allowing `@netlify/plugin-nextjs` to serve JS chunks and SSR pages cleanly |
 | 2026-08-09 13:45 | Dashboard UI Polishing | Enlarged Readiness Gauge ring (80px x 80px) for inner breathing room, removed container clipping, and fixed dropdown text contrast |
+| 2026-08-09 13:50 | OTP Autofill Removed | Removed ⚡ Auto-fill Code (123456) shortcut button from OTP verification modal in AuthModal.tsx |
+| 2026-08-09 13:55 | Evaluation Report Restored | Rebuilt assessment report page with Every Question Benchmarked Breakdown section featuring Depth, Accuracy, Trade-off scores per question |
+| 2026-08-09 14:00 | Landing Button Cleanup | Removed Go to Dashboard header button and Launch Candidate Workspace hero CTA; report finish now redirects to /?view=dashboard |
+| 2026-08-09 14:10 | Engine Badge Rename | Replaced "LangGraph Engine: Active" status badge and nav link with "Assessment Engine: Active" |
+| 2026-08-09 14:20 | Sidebar Branding Update | Renamed "Assessor Studio" to "Interview Studio" in workspace sidebar brand emblem |
+| 2026-08-09 14:25 | Header Bar Upgrade | Enhanced workspace header with chevron breadcrumb, search bar (⌘K), notification bell with accent dot, and compact engine status pill |
 
 ---
 
@@ -126,5 +132,11 @@ feat: restore public marketing landing page features grid, workflow, and liquid 
 fix: integrate justLoggedIn state trigger in auth context for clean workspace redirect
 fix: update netlify.toml configuration for nextjs asset loading
 style: enlarge readiness circle gauge and resolve candidate switcher dropdown text contrast
+security: remove OTP auto-fill shortcut from verification modal
+feat: restore evaluation report with per-question benchmarked breakdown section
+refactor: remove redundant landing CTA buttons and redirect report to dashboard
+style: replace LangGraph Engine badge with Assessment Engine Active
+style: rename Assessor Studio to Interview Studio in sidebar branding
+style: upgrade workspace header bar with search, bell, chevron breadcrumb
 docs: update ai usage log for hackathon compliance
 ```

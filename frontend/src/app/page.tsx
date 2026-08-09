@@ -270,7 +270,7 @@ export default function AppEntryPage() {
             <nav className="hidden md:flex items-center gap-6 text-xs text-muted font-semibold">
               <a href="#features" className="hover:text-white transition-colors">Capabilities</a>
               <a href="#workflow" className="hover:text-white transition-colors">Evaluation Workflow</a>
-              <a href="#architecture" className="hover:text-white transition-colors font-mono">LangGraph Engine</a>
+              <a href="#architecture" className="hover:text-white transition-colors font-mono">Assessment Engine</a>
             </nav>
 
             <div className="flex items-center gap-3">
@@ -640,7 +640,7 @@ export default function AppEntryPage() {
           <div className="flex items-center gap-4 text-xs font-mono">
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-full liquid-glass-success text-emerald-400 font-semibold border border-emerald-500/30 shadow-md">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              LangGraph Engine: Active
+              Assessment Engine: Active
             </div>
           </div>
         </header>

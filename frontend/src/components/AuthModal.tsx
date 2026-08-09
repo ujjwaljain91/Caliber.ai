@@ -397,13 +397,6 @@ export default function AuthModal() {
               >
                 {isVerifying ? "Verifying Code..." : "Verify & Sign In →"}
               </button>
-              <button
-                type="button"
-                onClick={handleQuickDemoFill}
-                className="w-full py-2.5 rounded-2xl liquid-glass-pill text-xs font-bold text-accent border border-accent/35 hover:-translate-y-0.5 transition-all duration-300"
-              >
-                ⚡ Auto-fill Code (123456)
-              </button>
             </div>
 
             <div className="flex items-center justify-between text-xs text-muted pt-2 border-t border-white/10">
